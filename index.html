@@ -43,6 +43,8 @@
     if(!t) t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
     r.setAttribute("data-theme",t);
   }catch(e){ r.setAttribute("data-theme","light"); }
+  var V=["drag","type","click"];
+  r.setAttribute("data-pz", V[Math.floor(Math.random()*V.length)]);
 })();
 </script>
 
@@ -179,11 +181,29 @@ html.js .puzzle[hidden]{display:none}
 }
 .pz-skip:hover{border-color:var(--ink);color:var(--ink)}
 .pz-skip:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-.pz-wrap{max-width:760px;text-align:center;touch-action:none;-webkit-user-select:none;user-select:none;cursor:ew-resize}
+.pz-wrap{max-width:760px;text-align:center}
 .pz-eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:24px}
-.pz-stack{position:relative;--p:0%}
 .pz-text{font-family:var(--f-display);font-weight:800;font-size:clamp(21px,3.6vw,36px);line-height:1.16;letter-spacing:-.02em;color:var(--ink);margin:0}
+
+/* three variants, only one shown per load, picked before first paint (head script) */
+.pz-v{display:none}
+html[data-pz="drag"] #pzDrag{display:block}
+html[data-pz="type"] #pzType{display:block}
+html[data-pz="click"] #pzClick{display:block}
+
+#pzDrag{touch-action:none;-webkit-user-select:none;user-select:none;cursor:ew-resize}
+.pz-stack{position:relative;--p:0%}
 .pz-blur{position:absolute;inset:0;filter:blur(9px);opacity:.6;clip-path:inset(0 0 0 var(--p));will-change:clip-path}
+
+.pz-typeline{display:flex;align-items:center;justify-content:center;gap:12px;font-family:var(--f-mono);font-size:clamp(17px,2.4vw,22px)}
+.pz-typeline label{color:var(--stamp)}
+.pz-typeline input{background:none;border:0;border-bottom:1px solid var(--rule);outline:0;color:var(--ink);font-family:inherit;font-size:inherit;text-align:center;width:min(320px,60vw);padding:4px 0}
+.pz-typeline input::placeholder{color:var(--ink-3)}
+.pz-typeline input:focus-visible{border-color:var(--ink)}
+
+#pzClick .pz-text{max-width:520px;line-height:1.5}
+.pzm{cursor:pointer}
+.pzm:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 
 /* ═════════════ RAIL ═════════════ */
 .rail{
@@ -489,12 +509,30 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 
 <div class="puzzle" id="puzzle">
   <button class="pz-skip" id="pzSkip" type="button">Skip</button>
-  <div class="pz-wrap" id="pzWrap">
+
+  <div class="pz-wrap pz-v" id="pzDrag">
     <p class="pz-eyebrow" aria-hidden="true">Drag to prove it</p>
     <div class="pz-stack" id="pzStack">
       <p class="pz-text">He builds retrieval systems that refuse to answer without a source.</p>
       <p class="pz-text pz-blur" aria-hidden="true">He builds retrieval systems that refuse to answer without a source.</p>
     </div>
+  </div>
+
+  <div class="pz-wrap pz-v" id="pzType">
+    <p class="pz-eyebrow" aria-hidden="true">Type to prove it</p>
+    <div class="pz-typeline">
+      <label for="pzInput">?&gt;</label>
+      <input id="pzInput" type="text" autocomplete="off" spellcheck="false"
+             placeholder="type anything to begin" aria-label="Type anything to begin">
+      <div class="caret" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <div class="pz-wrap pz-v" id="pzClick">
+    <p class="pz-eyebrow" aria-hidden="true">Click to prove it</p>
+    <p class="pz-text">Prove <mark class="pzm" tabindex="0" role="button" aria-label="Mark 1 of 3">retrieval</mark>.
+      Prove <mark class="pzm" tabindex="0" role="button" aria-label="Mark 2 of 3">citation</mark>.
+      Prove <mark class="pzm" tabindex="0" role="button" aria-label="Mark 3 of 3">source</mark>.</p>
   </div>
 </div>
 
@@ -1155,10 +1193,14 @@ function boot(){
     }
   });
 }
-/* ═══════════ OPENING PUZZLE — gate on boot(), not a new load path ═══════════ */
-var puzzle=document.getElementById("puzzle"), pzWrap=document.getElementById("pzWrap"),
-    pzStack=document.getElementById("pzStack"), pzSkip=document.getElementById("pzSkip"),
-    pzDone=false;
+/* ═══════════ OPENING PUZZLE — three lightweight variants, one per load,
+   picked before first paint (head script sets html[data-pz]). Same chrome,
+   same exits, every variant: skip button, Escape key, RM bypass, no-JS
+   invisibility. Nothing here is a new signature device — drag reuses the
+   media clip-path wipe, type reuses the retriever's own input/caret, click
+   reuses the highlighter mark. ═══════════ */
+var puzzle=document.getElementById("puzzle"), pzSkip=document.getElementById("pzSkip"),
+    pzDone=false, PZV=document.documentElement.dataset.pz;
 function finishPuzzle(){
   if(pzDone) return; pzDone=true;
   puzzle.classList.add("gone");
@@ -1168,17 +1210,37 @@ function initPuzzle(){
   if(RM){ puzzle.hidden=true; boot(); return; }
   pzSkip.addEventListener("click",finishPuzzle);
   addEventListener("keydown",function(e){ if(e.key==="Escape") finishPuzzle(); });
-  var dragging=false;
-  function setProg(clientX){
-    var r=pzWrap.getBoundingClientRect();
-    var p=Math.max(0,Math.min(1,(clientX-r.left)/r.width));
-    pzStack.style.setProperty("--p",(p*100)+"%");
-    if(p>0.94) finishPuzzle();
+
+  if(PZV==="drag"){
+    var pzWrap=document.getElementById("pzDrag"), pzStack=document.getElementById("pzStack"), dragging=false;
+    function setProg(clientX){
+      var r=pzWrap.getBoundingClientRect();
+      var p=Math.max(0,Math.min(1,(clientX-r.left)/r.width));
+      pzStack.style.setProperty("--p",(p*100)+"%");
+      if(p>0.94) finishPuzzle();
+    }
+    pzWrap.addEventListener("pointerdown",function(e){ dragging=true; setProg(e.clientX); });
+    addEventListener("pointermove",function(e){ if(dragging) setProg(e.clientX); });
+    addEventListener("pointerup",function(){ dragging=false; });
+    setTimeout(function(){ pzSkip.focus({preventScroll:true}); },50);
+
+  } else if(PZV==="type"){
+    var pzInput=document.getElementById("pzInput");
+    pzInput.addEventListener("input",function(){ if(pzInput.value.length>0) finishPuzzle(); });
+    setTimeout(function(){ pzInput.focus({preventScroll:true}); },50);
+
+  } else {
+    var marks=Array.prototype.slice.call(document.querySelectorAll("#pzClick .pzm")), lit=new Set();
+    function tryMark(m){
+      m.classList.add("lit"); lit.add(m);
+      if(lit.size>=marks.length) finishPuzzle();
+    }
+    marks.forEach(function(m){
+      m.addEventListener("click",function(){ tryMark(m); });
+      m.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); tryMark(m); } });
+    });
+    setTimeout(function(){ pzSkip.focus({preventScroll:true}); },50);
   }
-  pzWrap.addEventListener("pointerdown",function(e){ dragging=true; setProg(e.clientX); });
-  addEventListener("pointermove",function(e){ if(dragging) setProg(e.clientX); });
-  addEventListener("pointerup",function(){ dragging=false; });
-  setTimeout(function(){ pzSkip.focus({preventScroll:true}); },50);
 }
 if(document.readyState!=="loading") initPuzzle(); else addEventListener("DOMContentLoaded",initPuzzle);
 
