@@ -1,0 +1,13 @@
+# never commit the CV — it carries a personal phone number
+*.pdf
+
+# originals stay local; only derivatives ship
+media/_source/
+
+# review scratch
+_review/
+
+.DS_Store
+Thumbs.db
+node_modules/
+.vercel
