@@ -283,6 +283,21 @@ h2{
 .lede{font-size:clamp(18px,2.1vw,22px);line-height:1.55;max-width:60ch;color:var(--ink-2)}
 .lede strong{font-weight:400;color:var(--ink)}
 
+/* one photographic header band — the sunset ridge, the largest single visual
+   moment on the page outside the two product figures */
+.margins-band{
+  position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;width:100vw;
+  padding:clamp(70px,16vh,150px) var(--pad) clamp(56px,12vh,110px);
+  background-image:linear-gradient(180deg,rgba(12,11,8,.32),rgba(12,11,8,.74) 82%),url("media/04-margin-01-1280.jpg");
+  background-size:cover;background-position:center 58%;background-repeat:no-repeat;
+  margin-bottom:clamp(46px,7vw,78px);
+}
+@media(min-width:861px){.margins-band{padding-left:calc(var(--pad) + var(--rail) / 2);padding-right:calc(var(--pad) + var(--rail) / 2)}}
+.margins-band .wrap{padding:0}
+.margins-band .eyebrow{color:rgba(241,238,228,.68)}
+.margins-band .eyebrow::after{background:rgba(241,238,228,.26)}
+.margins-band h2{color:#F2EFE5;margin-bottom:0;text-shadow:0 2px 24px rgba(0,0,0,.35)}
+
 /* ═════════════ 00 HERO ═════════════ */
 .hero{padding-top:clamp(48px,9vh,90px);padding-bottom:clamp(60px,9vh,110px)}
 .name{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);margin-bottom:26px}
@@ -459,6 +474,24 @@ html.js .pin.on .pin-inner{position:sticky;top:0;height:100vh;display:flex;flex-
 .mg h4{font-family:var(--f-display);font-weight:600;font-size:17px;letter-spacing:-.01em;margin-bottom:8px}
 .mg p{font-size:15px;color:var(--ink-2)}
 .mg .tag{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:12px}
+/* two-row photo strip — swipe/scroll horizontally, no caption chrome */
+.strip{margin-top:clamp(40px,6vw,64px);display:flex;flex-direction:column;gap:10px}
+.strip-row{
+  display:flex;gap:10px;overflow-x:auto;overscroll-behavior-x:contain;
+  scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+  padding-bottom:2px;scrollbar-width:none;
+}
+.strip-row::-webkit-scrollbar{display:none}
+.strip-row:nth-child(2){margin-left:clamp(18px,5vw,54px)}
+.strip picture{flex:none;scroll-snap-align:start;display:block}
+.strip img{
+  width:clamp(150px,26vw,260px);height:clamp(104px,17vw,172px);
+  object-fit:cover;display:block;border:1px solid var(--rule);
+  filter:saturate(.92);transition:filter var(--t-micro) var(--e-micro),transform var(--t-micro) var(--e-micro);
+}
+.strip img:hover{filter:saturate(1);transform:translateY(-2px)}
+@media(max-width:700px){.strip-row:nth-child(2){margin-left:24px}}
+
 .essay{margin-top:clamp(46px,7vw,78px);max-width:64ch}
 .essay h3{font-family:var(--f-display);font-weight:800;font-size:clamp(22px,3vw,32px);letter-spacing:-.025em;line-height:1.05;margin-bottom:18px}
 .essay p{font-size:17.5px;line-height:1.66;color:var(--ink-2)}
@@ -917,8 +950,12 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 
   <!-- ══ 04 MARGINS ═══════════════════════════════════════ -->
   <section class="sec" id="s4">
-    <p class="eyebrow">04 — Margins</p>
-    <h2>What's in the other notebook.</h2>
+    <div class="margins-band">
+      <div class="wrap">
+        <p class="eyebrow">04 — Margins</p>
+        <h2>What's in the other notebook.</h2>
+      </div>
+    </div>
 
     <div class="mg">
       <article>
@@ -951,6 +988,83 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
         <p>One lab assistant for researchers, engineers and technical organisations — where every
           step of a chain of reasoning is checkable against a source. Everything above is a piece of it.</p>
       </article>
+    </div>
+
+    <div class="strip" aria-label="Photographs">
+      <div class="strip-row">
+        <picture>
+          <source type="image/avif" srcset="media/04-margin-11-480.avif 480w, media/04-margin-11-800.avif 800w" sizes="(max-width:700px) 44vw, 260px">
+          <source type="image/webp" srcset="media/04-margin-11-480.webp 480w, media/04-margin-11-800.webp 800w" sizes="(max-width:700px) 44vw, 260px">
+          <img src="media/04-margin-11-480.jpg" alt="Standing above a sea of cloud filling a valley, back to camera." loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="media/04-margin-03-480.avif 480w, media/04-margin-03-800.avif 800w" sizes="(max-width:700px) 44vw, 260px">
+          <source type="image/webp" srcset="media/04-margin-03-480.webp 480w, media/04-margin-03-800.webp 800w" sizes="(max-width:700px) 44vw, 260px">
+          <img src="media/04-margin-03-480.jpg" alt="A Himalayan valley at dawn, terraced slopes and snow patches under an orange horizon." loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="media/04-margin-02-480.avif 480w, media/04-margin-02-800.avif 800w" sizes="(max-width:700px) 44vw, 260px">
+          <source type="image/webp" srcset="media/04-margin-02-480.webp 480w, media/04-margin-02-800.webp 800w" sizes="(max-width:700px) 44vw, 260px">
+          <img src="media/04-margin-02-480.jpg" alt="A dog resting on a gravel path in bright sun." loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="media/04-margin-18-480.avif 480w, media/04-margin-18-800.avif 800w" sizes="(max-width:700px) 44vw, 260px">
+          <source type="image/webp" srcset="media/04-margin-18-480.webp 480w, media/04-margin-18-800.webp 800w" sizes="(max-width:700px) 44vw, 260px">
+          <img src="media/04-margin-18-480.jpg" alt="Prayer flags strung across a ridge, mountains and haze behind." loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="media/04-margin-06-480.avif 480w, media/04-margin-06-800.avif 800w" sizes="(max-width:700px) 44vw, 260px">
+          <source type="image/webp" srcset="media/04-margin-06-480.webp 480w, media/04-margin-06-800.webp 800w" sizes="(max-width:700px) 44vw, 260px">
+          <img src="media/04-margin-06-480.jpg" alt="Sunset over layered Himalayan ridgelines, the sun low between two peaks." loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="media/04-margin-13-480.avif 480w, media/04-margin-13-800.avif 800w" sizes="(max-width:700px) 44vw, 260px">
+          <source type="image/webp" srcset="media/04-margin-13-480.webp 480w, media/04-margin-13-800.webp 800w" sizes="(max-width:700px) 44vw, 260px">
+          <img src="media/04-margin-13-480.jpg" alt="A glass-and-steel campus building under an overcast sky." loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="media/04-margin-12-480.avif 480w, media/04-margin-12-800.avif 800w" sizes="(max-width:700px) 44vw, 260px">
+          <source type="image/webp" srcset="media/04-margin-12-480.webp 480w, media/04-margin-12-800.webp 800w" sizes="(max-width:700px) 44vw, 260px">
+          <img src="media/04-margin-12-480.jpg" alt="Standing on a misty mountain road, back to camera, cloud closing over the ridge." loading="lazy" decoding="async">
+        </picture>
+      </div>
+      <div class="strip-row">
+        <picture>
+          <source type="image/avif" srcset="media/04-margin-19-480.avif 480w, media/04-margin-19-800.avif 800w" sizes="(max-width:700px) 44vw, 260px">
+          <source type="image/webp" srcset="media/04-margin-19-480.webp 480w, media/04-margin-19-800.webp 800w" sizes="(max-width:700px) 44vw, 260px">
+          <img src="media/04-margin-19-480.jpg" alt="A snow-dusted village street with tin-roofed houses." loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="media/04-margin-04-480.avif 480w, media/04-margin-04-800.avif 800w" sizes="(max-width:700px) 44vw, 260px">
+          <source type="image/webp" srcset="media/04-margin-04-480.webp 480w, media/04-margin-04-800.webp 800w" sizes="(max-width:700px) 44vw, 260px">
+          <img src="media/04-margin-04-480.jpg" alt="A weathered green sign at Tiger Fall reading: There's no better place to find yourself than sitting by a waterfall and listening to its music." loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="media/04-margin-14-480.avif 480w, media/04-margin-14-800.avif 800w" sizes="(max-width:700px) 44vw, 260px">
+          <source type="image/webp" srcset="media/04-margin-14-480.webp 480w, media/04-margin-14-800.webp 800w" sizes="(max-width:700px) 44vw, 260px">
+          <img src="media/04-margin-14-480.jpg" alt="A cafe interior with a laptop open on a wooden table." loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="media/04-margin-05-480.avif 480w, media/04-margin-05-800.avif 800w" sizes="(max-width:700px) 44vw, 260px">
+          <source type="image/webp" srcset="media/04-margin-05-480.webp 480w, media/04-margin-05-800.webp 800w" sizes="(max-width:700px) 44vw, 260px">
+          <img src="media/04-margin-05-480.jpg" alt="The same dog in low afternoon light, half in shadow." loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="media/04-margin-17-480.avif 480w, media/04-margin-17-800.avif 800w" sizes="(max-width:700px) 44vw, 260px">
+          <source type="image/webp" srcset="media/04-margin-17-480.webp 480w, media/04-margin-17-800.webp 800w" sizes="(max-width:700px) 44vw, 260px">
+          <img src="media/04-margin-17-480.jpg" alt="Forest and a utility pole silhouetted against a deep blue evening sky." loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="media/04-margin-16-480.avif 480w, media/04-margin-16-800.avif 800w" sizes="(max-width:700px) 44vw, 260px">
+          <source type="image/webp" srcset="media/04-margin-16-480.webp 480w, media/04-margin-16-800.webp 800w" sizes="(max-width:700px) 44vw, 260px">
+          <img src="media/04-margin-16-480.jpg" alt="Standing in front of a Google Cloud sign." loading="lazy" decoding="async">
+        </picture>
+        <picture>
+          <source type="image/avif" srcset="media/04-margin-15-480.avif 480w, media/04-margin-15-800.avif 800w" sizes="(max-width:700px) 44vw, 260px">
+          <source type="image/webp" srcset="media/04-margin-15-480.webp 480w, media/04-margin-15-800.webp 800w" sizes="(max-width:700px) 44vw, 260px">
+          <img src="media/04-margin-15-480.jpg" alt="Portrait, blurred interior background." loading="lazy" decoding="async">
+        </picture>
+      </div>
     </div>
 
     <div class="essay">
