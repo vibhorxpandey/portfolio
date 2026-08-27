@@ -43,7 +43,7 @@
     if(!t) t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
     r.setAttribute("data-theme",t);
   }catch(e){ r.setAttribute("data-theme","light"); }
-  var V=["drag","type","click","race","catch"];
+  var V=["drag","type","click","race","catch","name"];
   r.setAttribute("data-pz", V[Math.floor(Math.random()*V.length)]);
 })();
 </script>
@@ -192,6 +192,7 @@ html[data-pz="type"] #pzType{display:block}
 html[data-pz="click"] #pzClick{display:block}
 html[data-pz="race"] #pzRace{display:block}
 html[data-pz="catch"] #pzCatch{display:block}
+html[data-pz="name"] #pzName{display:block}
 
 #pzDrag{touch-action:none;-webkit-user-select:none;user-select:none;cursor:ew-resize}
 .pz-stack{position:relative;--p:0%}
@@ -212,6 +213,29 @@ html[data-pz="catch"] #pzCatch{display:block}
 }
 .pz-hud{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:14px}
 .pz-hud b{font-weight:400;color:var(--ink)}
+
+/* name card — an original sting, not a borrowed one */
+html[data-pz="name"] .puzzle{background:#0B0B0C}
+html[data-pz="name"] .pz-skip{border-color:rgba(240,238,230,.34);color:rgba(240,238,230,.72)}
+html[data-pz="name"] .pz-skip:hover{border-color:#F0EEE6;color:#F0EEE6}
+#pzName{max-width:none;width:100%}
+#pzName .nm-line{
+  font-family:var(--f-display);font-weight:800;
+  font-size:clamp(34px,11.5vw,150px);line-height:.9;letter-spacing:.18em;
+  color:#C6402F;text-transform:uppercase;white-space:nowrap;
+  transform:scale(1.16);opacity:0;
+  text-shadow:0 0 42px rgba(198,64,47,.34);
+}
+#pzName.armed .nm-line{opacity:1;transition:opacity 420ms var(--e-enter)}
+#pzName.fire .nm-line{
+  transform:scale(1);letter-spacing:.02em;opacity:1;
+  transition:transform 1100ms cubic-bezier(.16,.84,.32,1),letter-spacing 1100ms cubic-bezier(.16,.84,.32,1);
+}
+#pzName .nm-hint{
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(240,238,230,.52);margin-top:28px;
+}
+#pzName.fire .nm-hint{opacity:0;transition:opacity 300ms}
 .pzm{cursor:pointer}
 .pzm:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 
@@ -680,6 +704,11 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
     <canvas id="pzCatchC" width="360" height="300" role="img" aria-label="Catching game. Move left and right with arrow keys to catch three falling highlighter marks, or press Escape to skip."></canvas>
     <p class="pz-hud">Caught <b id="pzCatchN">0</b> / 3 &nbsp;·&nbsp; &#8592; &#8594; or drag</p>
   </div>
+  <div class="pz-wrap pz-v" id="pzName">
+    <p class="nm-line">Vibhor Pandey</p>
+    <p class="nm-hint">Click anywhere · sound on</p>
+  </div>
+
 
 </div>
 
@@ -1616,6 +1645,58 @@ function initPuzzle(){
     raf=requestAnimationFrame(draw);
     setTimeout(function(){ pzSkip.focus({preventScroll:true}); },50);
 
+
+  } else if(PZV==="name"){
+    var card=document.getElementById("pzName"), fired=false;
+    setTimeout(function(){ card.classList.add("armed"); }, 120);
+
+    /* An ORIGINAL two-note sting, synthesised in the browser — a low
+       thump under a rising fifth. Deliberately not a reproduction of any
+       existing brand's registered sound. No audio files ship with the page. */
+    function sting(){
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return;
+      try{
+        var ac = new AC(), t = ac.currentTime;
+        var master = ac.createGain();
+        master.gain.setValueAtTime(0.0001, t);
+        master.gain.exponentialRampToValueAtTime(0.5, t+0.02);
+        master.gain.exponentialRampToValueAtTime(0.0001, t+1.5);
+        master.connect(ac.destination);
+
+        // low thump
+        var o1 = ac.createOscillator(), g1 = ac.createGain();
+        o1.type="sine"; o1.frequency.setValueAtTime(104, t);
+        o1.frequency.exponentialRampToValueAtTime(58, t+0.5);
+        g1.gain.setValueAtTime(0.9, t); g1.gain.exponentialRampToValueAtTime(0.001, t+0.75);
+        o1.connect(g1); g1.connect(master); o1.start(t); o1.stop(t+0.8);
+
+        // rising fifth on top, a beat later
+        var o2 = ac.createOscillator(), g2 = ac.createGain();
+        o2.type="triangle"; o2.frequency.setValueAtTime(196, t+0.13);
+        o2.frequency.exponentialRampToValueAtTime(294, t+0.30);
+        g2.gain.setValueAtTime(0.0001, t+0.13);
+        g2.gain.exponentialRampToValueAtTime(0.55, t+0.19);
+        g2.gain.exponentialRampToValueAtTime(0.0001, t+1.15);
+        o2.connect(g2); g2.connect(master); o2.start(t+0.13); o2.stop(t+1.2);
+      }catch(e){ /* audio unavailable — the visual still runs */ }
+    }
+
+    function fire(){
+      if(fired||pzDone) return; fired=true;
+      card.classList.add("fire");
+      sting();
+      setTimeout(finishPuzzle, 1250);
+    }
+    puzzle.addEventListener("pointerdown", function(e){
+      if(e.target.closest("#pzSkip")) return;
+      fire();
+    });
+    addEventListener("keydown", function(e){
+      if(e.key==="Escape") return;      // Escape still skips, handled above
+      if(!fired) fire();
+    });
+    setTimeout(function(){ pzSkip.focus({preventScroll:true}); },50);
   } else {
     var cc=document.getElementById("pzCatchC"), cx2=cc.getContext("2d"),
         px=cc.width/2, marks=[], caught=0, raf2=null, last2=0, sp2=0;
