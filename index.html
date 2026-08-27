@@ -407,6 +407,13 @@ html.js .pin.on .pin-inner{position:sticky;top:0;height:100vh;display:flex;flex-
 .marq div{display:flex;gap:28px;width:max-content;animation:slide 34s linear infinite;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
 .marq b{font-weight:400;color:var(--ink)}
 @keyframes slide{to{transform:translateX(-50%)}}
+.collab-label{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:44px}
+.marq-logos div{gap:52px;animation-duration:38s}
+.marq-logos img{height:26px;width:auto;display:block;opacity:.82;filter:grayscale(0);transition:opacity var(--t-micro) var(--e-micro)}
+.marq-logos img:hover{opacity:1}
+.marq-logos .dg{display:none}
+:root[data-theme="dark"] .marq-logos .lg{display:none}
+:root[data-theme="dark"] .marq-logos .dg{display:block}
 .note{margin-top:26px;max-width:58ch;font-size:16px;color:var(--ink-2)}
 
 /* ═════════════ 03 EVIDENCE ═════════════ */
@@ -842,6 +849,32 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
         </tr>
       </tbody>
     </table>
+
+    <p class="collab-label" id="collabLabel">Worked with teams from</p>
+    <div class="marq marq-logos" role="group" aria-labelledby="collabLabel">
+      <div>
+        <img class="lg" src="media/logo-iitd-light.png" alt="IIT Delhi" height="26">
+        <img class="dg" src="media/logo-iitd-dark.png" alt="IIT Delhi" height="26">
+        <img class="lg" src="media/logo-iitk-light.png" alt="IIT Kanpur" height="26">
+        <img class="dg" src="media/logo-iitk-dark.png" alt="IIT Kanpur" height="26">
+        <img class="lg" src="media/logo-upes-light.png" alt="UPES" height="26">
+        <img class="dg" src="media/logo-upes-dark.png" alt="UPES" height="26">
+        <img class="lg" src="media/logo-uq-light.png" alt="University of Queensland" height="26">
+        <img class="dg" src="media/logo-uq-dark.png" alt="University of Queensland" height="26">
+        <img class="lg" src="media/logo-srm-light.png" alt="SRM Institute of Science and Technology" height="26">
+        <img class="dg" src="media/logo-srm-dark.png" alt="SRM Institute of Science and Technology" height="26">
+        <img class="lg" src="media/logo-iitd-light.png" alt="" height="26" aria-hidden="true">
+        <img class="dg" src="media/logo-iitd-dark.png" alt="" height="26" aria-hidden="true">
+        <img class="lg" src="media/logo-iitk-light.png" alt="" height="26" aria-hidden="true">
+        <img class="dg" src="media/logo-iitk-dark.png" alt="" height="26" aria-hidden="true">
+        <img class="lg" src="media/logo-upes-light.png" alt="" height="26" aria-hidden="true">
+        <img class="dg" src="media/logo-upes-dark.png" alt="" height="26" aria-hidden="true">
+        <img class="lg" src="media/logo-uq-light.png" alt="" height="26" aria-hidden="true">
+        <img class="dg" src="media/logo-uq-dark.png" alt="" height="26" aria-hidden="true">
+        <img class="lg" src="media/logo-srm-light.png" alt="" height="26" aria-hidden="true">
+        <img class="dg" src="media/logo-srm-dark.png" alt="" height="26" aria-hidden="true">
+      </div>
+    </div>
   </section>
 
   <!-- ══ 04 MARGINS ═══════════════════════════════════════ -->
