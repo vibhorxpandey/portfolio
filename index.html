@@ -160,6 +160,31 @@ html.js .load.gone{clip-path:inset(0 0 100% 0)}
 .load .track{position:absolute;left:var(--pad);right:var(--pad);bottom:calc(clamp(28px,6vh,56px) + clamp(64px,16vw,190px) * .95);height:1px;background:var(--rule)}
 .load .track i{position:absolute;inset:0 auto 0 0;width:0;background:var(--ink);display:block}
 
+/* ═══════════ OPENING PUZZLE — drag left to right to reveal the line.
+   Always skippable, keyboard-reachable, invisible without JS or under
+   reduced motion. Reuses the clip-path reveal already used for media. ═══════════ */
+.puzzle{display:none}
+html.js .puzzle{
+  display:flex;position:fixed;inset:0;z-index:10001;background:var(--stock);
+  align-items:center;justify-content:center;padding:var(--pad);
+  transition:opacity var(--t-reveal) var(--e-enter);
+}
+html.js .puzzle[hidden]{display:none}
+.puzzle.gone{opacity:0;pointer-events:none}
+.pz-skip{
+  position:absolute;top:18px;right:var(--pad);background:none;border:1px solid var(--rule);
+  color:var(--ink-2);font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;padding:7px 11px;cursor:pointer;
+  transition:border-color var(--t-micro) var(--e-micro),color var(--t-micro) var(--e-micro);
+}
+.pz-skip:hover{border-color:var(--ink);color:var(--ink)}
+.pz-skip:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.pz-wrap{max-width:760px;text-align:center;touch-action:none;-webkit-user-select:none;user-select:none;cursor:ew-resize}
+.pz-eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:24px}
+.pz-stack{position:relative;--p:0%}
+.pz-text{font-family:var(--f-display);font-weight:800;font-size:clamp(21px,3.6vw,36px);line-height:1.16;letter-spacing:-.02em;color:var(--ink);margin:0}
+.pz-blur{position:absolute;inset:0;filter:blur(9px);opacity:.6;clip-path:inset(0 0 0 var(--p));will-change:clip-path}
+
 /* ═════════════ RAIL ═════════════ */
 .rail{
   position:fixed;left:0;top:0;bottom:0;width:var(--rail);z-index:60;
@@ -205,11 +230,19 @@ html.js .load.gone{clip-path:inset(0 0 100% 0)}
 .wrap{max-width:var(--maxw);margin:0 auto}
 
 .masthead{
-  display:flex;justify-content:space-between;align-items:baseline;gap:18px;
+  display:flex;justify-content:space-between;align-items:center;gap:18px;
   padding:20px 96px 0 0;font-family:var(--f-mono);font-size:11px;
   letter-spacing:.13em;text-transform:uppercase;color:var(--ink-2);
 }
 .masthead b{font-weight:500;color:var(--ink)}
+.mh-id{display:flex;align-items:center;gap:11px}
+.mh-mini{
+  width:30px;height:30px;border-radius:50%;flex:none;overflow:hidden;
+  border:1px solid var(--rule);
+}
+html.js .mh-mini{opacity:0;transform:scale(.7);transition:opacity var(--t-seq) var(--e-enter) .18s,transform var(--t-seq) var(--e-enter) .18s}
+.mh-mini.in{opacity:1;transform:none}
+.mh-mini img{width:100%;height:100%;object-fit:cover;display:block}
 .live{color:var(--stamp)}
 .live span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--stamp);margin-right:6px;vertical-align:middle;animation:pulse 2.4s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
@@ -417,6 +450,7 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
    ═════════════════════════════════════════════════════════ */
 @media(prefers-reduced-motion:reduce){
   html.js .load{display:none!important}
+  html.js .puzzle{display:none!important}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
   html.js h1 .ln>span,html.js .sub,html.js .engine{opacity:1!important;transform:none!important}
   html.js .reveal .frame{clip-path:none!important}
@@ -436,6 +470,17 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 <body>
 
 <a class="skip" href="#s0">Skip to content</a>
+
+<div class="puzzle" id="puzzle">
+  <button class="pz-skip" id="pzSkip" type="button">Skip</button>
+  <div class="pz-wrap" id="pzWrap">
+    <p class="pz-eyebrow" aria-hidden="true">Drag to prove it</p>
+    <div class="pz-stack" id="pzStack">
+      <p class="pz-text">He builds retrieval systems that refuse to answer without a source.</p>
+      <p class="pz-text pz-blur" aria-hidden="true">He builds retrieval systems that refuse to answer without a source.</p>
+    </div>
+  </div>
+</div>
 
 <div class="load" id="load" aria-hidden="true">
   <div class="track"><i id="loadbar"></i></div>
@@ -465,7 +510,16 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 <div class="wrap">
 
   <div class="masthead">
-    <div><b>Vibhor Pandey</b> — Dehradun, IN</div>
+    <div class="mh-id">
+      <span class="mh-mini" id="mhMini">
+        <picture>
+          <source type="image/avif" srcset="media/00-portrait-mini-96.avif 1x, media/00-portrait-mini-160.avif 2x, media/00-portrait-mini-240.avif 3x">
+          <source type="image/webp" srcset="media/00-portrait-mini-96.webp 1x, media/00-portrait-mini-160.webp 2x, media/00-portrait-mini-240.webp 3x">
+          <img src="media/00-portrait-mini-96.jpg" width="30" height="30" alt="" loading="eager" decoding="async">
+        </picture>
+      </span>
+      <div><b>Vibhor Pandey</b> — Dehradun, IN</div>
+    </div>
     <div class="live"><span></span>Open to research &amp; eng. roles</div>
   </div>
 
@@ -1017,6 +1071,7 @@ function reveal(){
   document.getElementById("h1").classList.add("in");
   document.getElementById("sub").classList.add("in");
   document.getElementById("engine").classList.add("in");
+  document.getElementById("mhMini").classList.add("in");
   if(RM){ qi.value=SEED; run(SEED,false);
     document.querySelectorAll("#s0 mark.mk").forEach(function(m){m.classList.add("lit")});
     return;
@@ -1047,7 +1102,32 @@ function boot(){
     }
   });
 }
-if(document.readyState!=="loading") requestAnimationFrame(boot); else addEventListener("DOMContentLoaded",boot);
+/* ═══════════ OPENING PUZZLE — gate on boot(), not a new load path ═══════════ */
+var puzzle=document.getElementById("puzzle"), pzWrap=document.getElementById("pzWrap"),
+    pzStack=document.getElementById("pzStack"), pzSkip=document.getElementById("pzSkip"),
+    pzDone=false;
+function finishPuzzle(){
+  if(pzDone) return; pzDone=true;
+  puzzle.classList.add("gone");
+  setTimeout(function(){ puzzle.hidden=true; boot(); }, RM?0:520);
+}
+function initPuzzle(){
+  if(RM){ puzzle.hidden=true; boot(); return; }
+  pzSkip.addEventListener("click",finishPuzzle);
+  addEventListener("keydown",function(e){ if(e.key==="Escape") finishPuzzle(); });
+  var dragging=false;
+  function setProg(clientX){
+    var r=pzWrap.getBoundingClientRect();
+    var p=Math.max(0,Math.min(1,(clientX-r.left)/r.width));
+    pzStack.style.setProperty("--p",(p*100)+"%");
+    if(p>0.94) finishPuzzle();
+  }
+  pzWrap.addEventListener("pointerdown",function(e){ dragging=true; setProg(e.clientX); });
+  addEventListener("pointermove",function(e){ if(dragging) setProg(e.clientX); });
+  addEventListener("pointerup",function(){ dragging=false; });
+  setTimeout(function(){ pzSkip.focus({preventScroll:true}); },50);
+}
+if(document.readyState!=="loading") initPuzzle(); else addEventListener("DOMContentLoaded",initPuzzle);
 
 /* ═══════════ SMOOTH SCROLL (Lenis-style: native scroll position, lerped)
    Deliberately NOT a transformed wrapper — that breaks position:sticky, which
