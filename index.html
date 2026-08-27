@@ -95,7 +95,7 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
 html:not(.js){scroll-behavior:smooth}
 body{
   background:var(--stock);color:var(--ink);
@@ -223,6 +223,13 @@ html[data-pz="click"] #pzClick{display:block}
 .prog i{display:block;width:1px;height:64px;background:var(--rule);position:relative;font-style:normal}
 .prog i::after{content:"";position:absolute;left:0;top:0;width:1px;height:var(--p,0%);background:var(--ink)}
 @media(max-width:860px){.rail{display:none}}
+/* the rail is fixed and passes over the dark 05 band — invert it there */
+.rail.over-dark{color:rgba(240,238,230,.72);border-right-color:rgba(240,238,230,.22)}
+.rail.over-dark a{color:rgba(240,238,230,.72)}
+.rail.over-dark a:hover,.rail.over-dark li.here a{color:#F4F1E8}
+.rail.over-dark .prog i{background:rgba(240,238,230,.28)}
+.rail.over-dark .prog i::after{background:#F4F1E8}
+
 
 /* theme toggle */
 .theme{
@@ -283,26 +290,39 @@ h2{
 .lede{font-size:clamp(18px,2.1vw,22px);line-height:1.55;max-width:60ch;color:var(--ink-2)}
 .lede strong{font-weight:400;color:var(--ink)}
 
-/* ═══ 05 closing band — prayer flags behind, skills marquee across the foot ═══ */
-.closeband{
+/* ═══ 05 REFERENCES — the whole section sits on the prayer-flag frame.
+   Everything inside is restyled for a dark ground; contrast checked below. ═══ */
+.s5band{
   position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;width:100vw;
-  margin-top:clamp(46px,8vh,90px);padding:clamp(56px,10vh,110px) var(--pad) 0;
-  background-image:linear-gradient(180deg,rgba(10,12,16,.46),rgba(10,12,16,.78)),url("media/04-margin-18-800.jpg");
-  background-size:cover;background-position:center 30%;
-  overflow:hidden;
+  padding-left:var(--pad);padding-right:var(--pad);
+  background-image:linear-gradient(180deg,rgba(9,11,14,.80),rgba(9,11,14,.90)),url("media/04-margin-18-800.jpg");
+  background-size:cover;background-position:center 34%;background-attachment:scroll;
+  border-top:1px solid var(--rule);
 }
-@media(min-width:861px){.closeband{padding-left:calc(var(--pad) + var(--rail) / 2);padding-right:calc(var(--pad) + var(--rail) / 2)}}
-.closeband h2{color:#F2EFE5;max-width:22ch;margin:0 auto 14px;text-align:center;text-shadow:0 2px 24px rgba(0,0,0,.4)}
-.closeband .cb-sub{
-  font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(241,238,228,.62);text-align:center;margin-bottom:clamp(40px,7vh,72px);
-}
-.skillrow{overflow:hidden;border-top:1px solid rgba(241,238,228,.16);padding:16px 0 20px;margin-top:clamp(40px,7vh,70px)}
+@media(min-width:861px){.s5band{padding-left:calc(var(--pad) + var(--rail));padding-right:calc(var(--pad) + var(--rail))}}
+.s5band > *{max-width:var(--maxw);margin-left:auto;margin-right:auto}
+.s5band .eyebrow{color:rgba(240,238,230,.78)}
+.s5band .eyebrow::after{background:rgba(240,238,230,.24)}
+.s5band h2{color:#F4F1E8;text-shadow:0 2px 22px rgba(0,0,0,.42)}
+.s5band .lede{color:rgba(240,238,230,.80)}
+.s5band .lede strong{color:#F4F1E8;font-weight:500}
+
+/* bibliography on dark */
+.s5band .bib{border-top-color:rgba(240,238,230,.55)}
+.s5band .bib a{border-bottom-color:rgba(240,238,230,.20)}
+.s5band .bib .n{color:rgba(240,238,230,.58)}
+.s5band .bib .w{color:#F4F1E8}
+.s5band .bib .h{color:rgba(240,238,230,.72)}
+.s5band .bib a:hover .w{color:#14171C}
+.s5band .bib a:focus-visible{outline-color:#F4F1E8}
+
+.closeband{margin-top:clamp(40px,7vh,72px)}
+.skillrow{overflow:hidden;border-top:1px solid rgba(240,238,230,.18);padding:16px 0 26px}
 .skillrow .track{display:flex;gap:30px;width:max-content;animation:slide 46s linear infinite}
-.sk{display:inline-flex;align-items:center;gap:8px;flex:none;color:rgba(241,238,228,.80)}
+.sk{display:inline-flex;align-items:center;gap:8px;flex:none;color:rgba(240,238,230,.82)}
 .sk svg{width:20px;height:20px;fill:currentColor;flex:none}
 .sk b{font-family:var(--f-mono);font-size:10.5px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
-.sk-txt b{border:1px solid rgba(241,238,228,.34);padding:3px 7px}
+.sk-txt b{border:1px solid rgba(240,238,230,.36);padding:3px 7px}
 @media(prefers-reduced-motion:reduce){.skillrow .track{animation:none!important}}
 
 /* ═══ cutout band — name marquee runs BEHIND the figure ═══ */
@@ -1207,8 +1227,9 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
   </section>
 
   <!-- ══ 05 REFERENCES ════════════════════════════════════ -->
-  <section class="sec" id="s5">
+  <section class="sec s5band" id="s5">
     <p class="eyebrow">05 — References</p>
+    <h2>Cite this page.</h2>
     <p class="lede">Best for: research engineering, applied retrieval, financial NLP, or an
       early-stage team that needs someone who ships and measures.
       <strong>Fastest reply is email.</strong></p>
@@ -1227,8 +1248,6 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
     </nav>
 
     <div class="closeband">
-      <h2>Cite this page.</h2>
-      <p class="cb-sub">Fastest reply is email</p>
       <div class="skillrow" role="group" aria-label="Technologies used across these projects">
         <div class="track">
           <span class="sk"><svg aria-hidden="true"><use href="#i-python"/></svg><b>Python</b></span>
@@ -1784,6 +1803,19 @@ if(FINE && !RM){
   addEventListener("scroll",function(){ requestAnimationFrame(update); },{passive:true});
   addEventListener("resize",function(){ if(idx>=0) place(idx); });
   update();
+})();
+
+
+/* rail inverts while the dark 05 band is behind it */
+(function(){
+  var rail=document.querySelector(".rail"), band=document.querySelector(".s5band");
+  if(!rail||!band) return;
+  function upd(){
+    var r=band.getBoundingClientRect();
+    rail.classList.toggle("over-dark", r.top < innerHeight*0.5 && r.bottom > 0);
+  }
+  addEventListener("scroll",function(){ requestAnimationFrame(upd); },{passive:true});
+  addEventListener("resize",upd); upd();
 })();
 
 /* ═══════════ CURSOR — over interactive elements only ═══════════ */
