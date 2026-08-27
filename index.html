@@ -338,6 +338,15 @@ html.js .engine.in{opacity:1;transform:none}
 .vent-r p+p{margin-top:14px}
 .facts{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
 .facts span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.04em;border:1px solid var(--rule);padding:4px 8px;color:var(--ink-2)}
+.gh{
+  display:inline-flex;align-items:center;gap:6px;margin-top:12px;
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+  border:1px solid var(--rule);padding:5px 10px;color:var(--ink-2);text-decoration:none;
+  transition:border-color var(--t-micro) var(--e-micro),color var(--t-micro) var(--e-micro);
+}
+.gh svg{width:13px;height:13px;fill:currentColor;flex:none}
+.gh:hover{border-color:var(--ink);color:var(--ink)}
+.gh:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 @media(max-width:760px){.vent{grid-template-columns:1fr;gap:14px}}
 
 /* ═════════════ MEDIA ═════════════ */
@@ -583,8 +592,11 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
       <div class="vent">
         <div class="vent-l">
           <h3>Aurelius IDE</h3>
-          <p class="role">Primary product · open source ·
-            <a href="https://github.com/vibhorxpandey/Aurelius-IDE" target="_blank" rel="noopener">github</a></p>
+          <p class="role">Primary product · open source</p>
+          <a class="gh" href="https://github.com/vibhorxpandey/Aurelius-IDE" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+            Star on GitHub
+          </a>
         </div>
         <div class="vent-r">
           <p>A language server for research papers. You write LaTeX and it checks the document
@@ -646,6 +658,10 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
         <div class="vent-l">
           <h3>Veil Finance</h3>
           <p class="role">Equity research terminal · domain offline</p>
+          <a class="gh" href="https://github.com/vibhorxpandey/veil-finance" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+            Star on GitHub
+          </a>
         </div>
         <div class="vent-r">
           <p>An AI-native terminal for Indian small and mid caps — the segment where coverage is
@@ -659,6 +675,10 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
         <div class="vent-l">
           <h3>Veil Research</h3>
           <p class="role">Workspace · <a href="https://veilresearch.com" target="_blank" rel="noopener">veilresearch.com</a></p>
+          <a class="gh" href="https://github.com/vibhorxpandey/veil" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+            Star on GitHub
+          </a>
         </div>
         <div class="vent-r">
           <p>Five expert modes — research, biology, flywheel, write, mathematics — over one retrieval
