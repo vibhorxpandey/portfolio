@@ -43,7 +43,7 @@
     if(!t) t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
     r.setAttribute("data-theme",t);
   }catch(e){ r.setAttribute("data-theme","light"); }
-  var V=["drag","type","click"];
+  var V=["drag","type","click","race","catch"];
   r.setAttribute("data-pz", V[Math.floor(Math.random()*V.length)]);
 })();
 </script>
@@ -190,6 +190,8 @@ html.js .puzzle[hidden]{display:none}
 html[data-pz="drag"] #pzDrag{display:block}
 html[data-pz="type"] #pzType{display:block}
 html[data-pz="click"] #pzClick{display:block}
+html[data-pz="race"] #pzRace{display:block}
+html[data-pz="catch"] #pzCatch{display:block}
 
 #pzDrag{touch-action:none;-webkit-user-select:none;user-select:none;cursor:ew-resize}
 .pz-stack{position:relative;--p:0%}
@@ -202,6 +204,14 @@ html[data-pz="click"] #pzClick{display:block}
 .pz-typeline input:focus-visible{border-color:var(--ink)}
 
 #pzClick .pz-text{max-width:520px;line-height:1.5}
+
+/* car dodge */
+#pzRace canvas,#pzCatch canvas{
+  display:block;margin:0 auto;border:1px solid var(--rule);background:var(--stock-2);
+  touch-action:none;max-width:100%;
+}
+.pz-hud{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:14px}
+.pz-hud b{font-weight:400;color:var(--ink)}
 .pzm{cursor:pointer}
 .pzm:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 
@@ -659,6 +669,18 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
       Prove <mark class="pzm" tabindex="0" role="button" aria-label="Mark 2 of 3">citation</mark>.
       Prove <mark class="pzm" tabindex="0" role="button" aria-label="Mark 3 of 3">source</mark>.</p>
   </div>
+  <div class="pz-wrap pz-v" id="pzRace">
+    <p class="pz-eyebrow" aria-hidden="true">Dodge five to continue</p>
+    <canvas id="pzRaceC" width="360" height="300" role="img" aria-label="Lane dodging game. Use left and right arrow keys to avoid oncoming blocks, or press Escape to skip."></canvas>
+    <p class="pz-hud">Dodged <b id="pzRaceN">0</b> / 5 &nbsp;·&nbsp; &#8592; &#8594; or drag</p>
+  </div>
+
+  <div class="pz-wrap pz-v" id="pzCatch">
+    <p class="pz-eyebrow" aria-hidden="true">Catch three marks</p>
+    <canvas id="pzCatchC" width="360" height="300" role="img" aria-label="Catching game. Move left and right with arrow keys to catch three falling highlighter marks, or press Escape to skip."></canvas>
+    <p class="pz-hud">Caught <b id="pzCatchN">0</b> / 3 &nbsp;·&nbsp; &#8592; &#8594; or drag</p>
+  </div>
+
 </div>
 
 <div class="load" id="load" aria-hidden="true">
@@ -670,7 +692,7 @@ footer a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 <div class="grain" aria-hidden="true"></div>
 <div class="sweep" id="sweep" aria-hidden="true"></div>
 <div class="tip" id="tip" aria-hidden="true"></div>
-<svg class="cat" id="cat" viewBox="0 0 100 60" aria-hidden="true"><g transform="rotate(-12 50 30)"><path d="M14 30 C 2 28, 0 16, 8 10" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/><ellipse cx="42" cy="30" rx="27" ry="11.5"/><path d="M24 36 L 12 46" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M32 38 L 24 49" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M60 34 L 76 42" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M58 30 L 74 34" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/><circle cx="74" cy="22" r="11"/><path d="M66 14 L 65 4 L 74 11 Z"/><path d="M82 14 L 85 5 L 88 14 Z"/><circle cx="78" cy="21" r="2" fill="var(--stock)"/></g></svg>
+<svg class="cat" id="cat" viewBox="0 0 100 62" aria-hidden="true"><g transform="rotate(-10 50 31)"><path d="M16 32 C 3 30, 1 15, 11 9" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><ellipse cx="44" cy="32" rx="26" ry="12"/><path d="M27 39 L 16 49" stroke="currentColor" stroke-width="6.5" stroke-linecap="round" fill="none"/><path d="M35 41 L 28 52" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M60 36 L 77 44" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M59 31 L 77 35" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" fill="none"/><circle cx="74" cy="21" r="12.5"/><path d="M64 12 L 62 1 L 73 9 Z"/><path d="M82 11 L 86 1 L 89 12 Z"/><path d="M63 27 Q 74 33 84 26" fill="none" stroke="var(--stock)" stroke-width="2.6" stroke-linecap="round"/><circle cx="70" cy="19" r="2.4" fill="var(--stock)"/><circle cx="79.5" cy="19" r="2.4" fill="var(--stock)"/><circle cx="75" cy="25" r="1.5" fill="var(--stock)"/><path d="M84 24 L 92 22 M84 26 L 92 27" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></g></svg>
 
 <button class="theme" id="theme" type="button" aria-live="polite">Dark</button>
 
@@ -1538,7 +1560,7 @@ function initPuzzle(){
     pzInput.addEventListener("input",function(){ if(pzInput.value.length>0) finishPuzzle(); });
     setTimeout(function(){ pzInput.focus({preventScroll:true}); },50);
 
-  } else {
+  } else if(PZV==="click"){
     var marks=Array.prototype.slice.call(document.querySelectorAll("#pzClick .pzm")), lit=new Set();
     function tryMark(m){
       m.classList.add("lit"); lit.add(m);
@@ -1548,6 +1570,88 @@ function initPuzzle(){
       m.addEventListener("click",function(){ tryMark(m); });
       m.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); tryMark(m); } });
     });
+    setTimeout(function(){ pzSkip.focus({preventScroll:true}); },50);
+
+  } else if(PZV==="race"){
+    var rc=document.getElementById("pzRaceC"), rx=rc.getContext("2d"),
+        LANES=3, lane=1, blocks=[], dodged=0, raf=null, last=0, spawn=0;
+    var css=getComputedStyle(document.documentElement);
+    function col(n){ return css.getPropertyValue(n).trim()||"#14171C"; }
+    function draw(ts){
+      var dt=Math.min(40, ts-(last||ts)); last=ts;
+      rx.clearRect(0,0,rc.width,rc.height);
+      // lane rules
+      rx.strokeStyle=col("--rule"); rx.lineWidth=1;
+      for(var i=1;i<LANES;i++){ var x=rc.width/LANES*i; rx.beginPath(); rx.moveTo(x,0); rx.lineTo(x,rc.height); rx.stroke(); }
+      spawn-=dt;
+      if(spawn<=0){ blocks.push({l:Math.floor(Math.random()*LANES), y:-34}); spawn=620+Math.random()*260; }
+      rx.fillStyle=col("--ink");
+      for(var b=blocks.length-1;b>=0;b--){
+        var bl=blocks[b]; bl.y+=dt*0.30;
+        var bx=rc.width/LANES*bl.l + rc.width/LANES/2;
+        rx.fillRect(bx-17,bl.y,34,30);
+        if(bl.y>rc.height){ blocks.splice(b,1); dodged++; document.getElementById("pzRaceN").textContent=dodged;
+          if(dodged>=5){ cancelAnimationFrame(raf); finishPuzzle(); return; } }
+        if(bl.y+30>rc.height-52 && bl.y<rc.height-22 && bl.l===lane){ blocks.splice(b,1); }
+      }
+      // car
+      var cx=rc.width/LANES*lane + rc.width/LANES/2;
+      rx.fillStyle=col("--mark"); rx.strokeStyle=col("--ink"); rx.lineWidth=1.5;
+      rx.beginPath(); rx.moveTo(cx,rc.height-52); rx.lineTo(cx+15,rc.height-22); rx.lineTo(cx-15,rc.height-22); rx.closePath();
+      rx.fill(); rx.stroke();
+      raf=requestAnimationFrame(draw);
+    }
+    function move(d){ lane=Math.max(0,Math.min(LANES-1,lane+d)); }
+    addEventListener("keydown",function(e){
+      if(pzDone) return;
+      if(e.key==="ArrowLeft"){ e.preventDefault(); move(-1); }
+      if(e.key==="ArrowRight"){ e.preventDefault(); move(1); }
+    });
+    var rsx=null;
+    rc.addEventListener("pointerdown",function(e){ rsx=e.clientX; });
+    rc.addEventListener("pointerup",function(e){
+      if(rsx===null) return; var dx=e.clientX-rsx;
+      if(Math.abs(dx)>18) move(dx>0?1:-1); rsx=null;
+    });
+    raf=requestAnimationFrame(draw);
+    setTimeout(function(){ pzSkip.focus({preventScroll:true}); },50);
+
+  } else {
+    var cc=document.getElementById("pzCatchC"), cx2=cc.getContext("2d"),
+        px=cc.width/2, marks=[], caught=0, raf2=null, last2=0, sp2=0;
+    var css2=getComputedStyle(document.documentElement);
+    function c2(n){ return css2.getPropertyValue(n).trim()||"#14171C"; }
+    function draw2(ts){
+      var dt=Math.min(40, ts-(last2||ts)); last2=ts;
+      cx2.clearRect(0,0,cc.width,cc.height);
+      sp2-=dt;
+      if(sp2<=0){ marks.push({x:26+Math.random()*(cc.width-52), y:-16}); sp2=700+Math.random()*400; }
+      for(var i=marks.length-1;i>=0;i--){
+        var m=marks[i]; m.y+=dt*0.24;
+        cx2.fillStyle=c2("--mark"); cx2.strokeStyle=c2("--ink"); cx2.lineWidth=1;
+        cx2.fillRect(m.x-16,m.y,32,13); cx2.strokeRect(m.x-16,m.y,32,13);
+        if(m.y+13>=cc.height-30 && m.y<cc.height-8 && Math.abs(m.x-px)<34){
+          marks.splice(i,1); caught++; document.getElementById("pzCatchN").textContent=caught;
+          if(caught>=3){ cancelAnimationFrame(raf2); finishPuzzle(); return; }
+          continue;
+        }
+        if(m.y>cc.height) marks.splice(i,1);
+      }
+      // catcher
+      cx2.fillStyle=c2("--ink");
+      cx2.fillRect(px-30,cc.height-26,60,7);
+      raf2=requestAnimationFrame(draw2);
+    }
+    addEventListener("keydown",function(e){
+      if(pzDone) return;
+      if(e.key==="ArrowLeft"){ e.preventDefault(); px=Math.max(30,px-34); }
+      if(e.key==="ArrowRight"){ e.preventDefault(); px=Math.min(cc.width-30,px+34); }
+    });
+    cc.addEventListener("pointermove",function(e){
+      var r=cc.getBoundingClientRect();
+      px=Math.max(30,Math.min(cc.width-30,(e.clientX-r.left)*(cc.width/r.width)));
+    });
+    raf2=requestAnimationFrame(draw2);
     setTimeout(function(){ pzSkip.focus({preventScroll:true}); },50);
   }
 }
